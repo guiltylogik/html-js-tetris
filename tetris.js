@@ -6,6 +6,16 @@ const COL = 10;
 const SQ = 20;
 const VACANT = "WHITE";
 
+const PIECES = [
+    [Z, "maroon"],
+    [S, "yellow"],
+    [O, "green"],
+    [L, "grey"],
+    [I, "cyan"],
+    [J, "purple"],
+    [T, "orange"]
+]
+
 // draw a square
 function drawSq(x, y, color, strokeColor = "BLACK"){
     ctx.fillStyle = color;
@@ -34,4 +44,29 @@ function drawBoard(){
     }
 }
 
-drawBoard()
+function Piece(tetrimino, color){
+    this.tetrimino = tetrimino
+    this.color = color
+
+    this.tetriminoInedx = 0;
+    this.activeTetrimino = this.tetrimino[this.tetriminoInedx];
+
+    // for controlling the pieces
+    this.x = 0;
+    this.y = 0;
+}
+
+Piece.prototype.draw = function(){
+    for(r=0; r<this.activeTetrimino.length; r++){
+        for(c=0; c<this.activeTetrimino.length; c++){
+            if(this.activeTetrimino[r][c]){
+                drawSq(this.x + c, this.y + r, this.color)
+            }
+        }
+    }
+}
+
+let p = new Piece(PIECES[0][0], PIECES[0][1])
+
+drawBoard();
+p.draw();

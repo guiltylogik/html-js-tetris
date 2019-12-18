@@ -48,8 +48,8 @@ function Piece(tetrimino, color){
     this.tetrimino = tetrimino
     this.color = color
 
-    this.tetriminoInedx = 0;
-    this.activeTetrimino = this.tetrimino[this.tetriminoInedx];
+    this.tetriminoIndex = 0;
+    this.activeTetrimino = this.tetrimino[this.tetriminoIndex];
 
     // for controlling the pieces
     this.x = 4;
@@ -80,6 +80,25 @@ Piece.prototype.moveDown = function(){
     this.draw();
 }
 
+Piece.prototype.moveRight = function(){
+    this.unDraw();
+    this.x++;
+    this.draw();
+}
+
+Piece.prototype.moveLeft = function(){
+    this.unDraw();
+    this.x--;
+    this.draw();
+}
+
+Piece.prototype.rotatePiece = function(){
+    this.unDraw();
+    this.tetriminoIndex = (this.tetriminoIndex + 1) % this.tetrimino.length;
+    this.activeTetrimino = this.tetrimino[this.tetriminoIndex];
+    this.draw();
+}
+
 let dropStart = Date.now();
 function drop(){
     let now = Date.now();
@@ -93,6 +112,24 @@ function drop(){
 }
 
 let p = new Piece(PIECES[0][0], PIECES[0][1])
+
+document.addEventListener("keydown", CONTROL);
+
+function CONTROL(event){
+    if(event.keyCode == 37){
+        p.moveLeft();
+        dropStart = Date.now();
+    }else if(event.keyCode == 38){
+        p.rotatePiece();
+        dropStart = Date.now();
+    }else if(event.keyCode == 39){
+        p.moveRight();
+        dropStart = Date.now();
+    }else if(event.keyCode == 40){
+        p.moveDown();
+        dropStart = Date.now();
+    }
+}
 
 drawBoard();
 drop();

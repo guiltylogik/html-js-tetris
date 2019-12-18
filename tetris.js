@@ -7,10 +7,10 @@ const SQ = 20;
 const VACANT = "WHITE";
 
 const PIECES = [
-    [Z, "maroon"],
+    [Z, "fuchsia"],
     [S, "yellow"],
-    [O, "green"],
-    [L, "grey"],
+    [O, "teal"],
+    [L, "navy"],
     [I, "cyan"],
     [J, "purple"],
     [T, "orange"]
@@ -52,21 +52,47 @@ function Piece(tetrimino, color){
     this.activeTetrimino = this.tetrimino[this.tetriminoInedx];
 
     // for controlling the pieces
-    this.x = 0;
+    this.x = 4;
     this.y = 0;
 }
 
-Piece.prototype.draw = function(){
+Piece.prototype.fill = function(color){
     for(r=0; r<this.activeTetrimino.length; r++){
         for(c=0; c<this.activeTetrimino.length; c++){
             if(this.activeTetrimino[r][c]){
-                drawSq(this.x + c, this.y + r, this.color)
+                drawSq(this.x + c, this.y + r, color)
             }
         }
     }
 }
 
+Piece.prototype.draw = function(){
+    this.fill(this.color);
+}
+
+Piece.prototype.unDraw = function(){
+    this.fill(VACANT)
+}
+
+Piece.prototype.moveDown = function(){
+    this.unDraw();
+    this.y++;
+    this.draw();
+}
+
+let dropStart = Date.now();
+function drop(){
+    let now = Date.now();
+    let rateChange = now - dropStart;
+
+    if(rateChange > 1000){
+        p.moveDown();
+        dropStart = Date.now()
+    }
+    requestAnimationFrame(drop);
+}
+
 let p = new Piece(PIECES[0][0], PIECES[0][1])
 
 drawBoard();
-p.draw();
+drop();
